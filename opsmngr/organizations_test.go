@@ -365,16 +365,16 @@ func TestOrganizations_Delete(t *testing.T) {
 }
 
 func TestOrganizations_Update(t *testing.T) {
-    client, mux, teardown := setup()
-    defer teardown()
+	client, mux, teardown := setup()
+	defer teardown()
 
-    updateRequest := &Organization{
-        Name: "RenamedOrg",
-    }
+	updateRequest := &Organization{
+		Name: "RenamedOrg",
+	}
 
-    mux.HandleFunc(fmt.Sprintf("/api/public/v1.0/orgs/%s", orgID), func(w http.ResponseWriter, r *http.Request) {
-        testMethod(t, r, http.MethodPatch)
-        _, _ = fmt.Fprint(w, `{
+	mux.HandleFunc(fmt.Sprintf("/api/public/v1.0/orgs/%s", orgID), func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, http.MethodPatch)
+		_, _ = fmt.Fprint(w, `{
             "id": "5a0a1e7e0f2912c554081adc",
             "links": [{
                 "href": "https://cloud.mongodb.com/api/public/v1.0/orgs/5a0a1e7e0f2912c554081adc",
@@ -382,25 +382,25 @@ func TestOrganizations_Update(t *testing.T) {
             }],
             "name": "RenamedOrg"
         }`)
-    })
+	})
 
-    org, _, err := client.Organizations.Update(ctx, orgID, updateRequest)
-    if err != nil {
-        t.Fatalf("Organizations.Update returned error: %v", err)
-    }
+	org, _, err := client.Organizations.Update(ctx, orgID, updateRequest)
+	if err != nil {
+		t.Fatalf("Organizations.Update returned error: %v", err)
+	}
 
-    expected := &Organization{
-        ID: orgID,
-        Links: []*Link{
-            {
-                Href: "https://cloud.mongodb.com/api/public/v1.0/orgs/5a0a1e7e0f2912c554081adc",
-                Rel:  "self",
-            },
-        },
-        Name: "RenamedOrg",
-    }
+	expected := &Organization{
+		ID: orgID,
+		Links: []*Link{
+			{
+				Href: "https://cloud.mongodb.com/api/public/v1.0/orgs/5a0a1e7e0f2912c554081adc",
+				Rel:  "self",
+			},
+		},
+		Name: "RenamedOrg",
+	}
 
-    if diff := deep.Equal(org, expected); diff != nil {
-        t.Error(diff)
-    }
+	if diff := deep.Equal(org, expected); diff != nil {
+		t.Error(diff)
+	}
 }

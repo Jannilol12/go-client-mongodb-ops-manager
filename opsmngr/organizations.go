@@ -239,25 +239,25 @@ func (s *OrganizationsServiceOp) Delete(ctx context.Context, orgID string) (*Res
 //
 // See more: https://docs.opsmanager.mongodb.com/current/reference/api/organizations/organization-rename/
 func (s *OrganizationsServiceOp) Update(ctx context.Context, orgID string, updateRequest *Organization) (*Organization, *Response, error) {
-    if orgID == "" {
-        return nil, nil, NewArgError("orgID", "must be set")
-    }
-    if updateRequest == nil {
-        return nil, nil, NewArgError("updateRequest", "cannot be nil")
-    }
+	if orgID == "" {
+		return nil, nil, NewArgError("orgID", "must be set")
+	}
+	if updateRequest == nil {
+		return nil, nil, NewArgError("updateRequest", "cannot be nil")
+	}
 
-    path := fmt.Sprintf("%s/%s", orgsBasePath, orgID)
+	path := fmt.Sprintf("%s/%s", orgsBasePath, orgID)
 
-    req, err := s.Client.NewRequest(ctx, http.MethodPatch, path, updateRequest)
-    if err != nil {
-        return nil, nil, err
-    }
+	req, err := s.Client.NewRequest(ctx, http.MethodPatch, path, updateRequest)
+	if err != nil {
+		return nil, nil, err
+	}
 
-    root := new(Organization)
-    resp, err := s.Client.Do(ctx, req, root)
-    if err != nil {
-        return nil, resp, err
-    }
+	root := new(Organization)
+	resp, err := s.Client.Do(ctx, req, root)
+	if err != nil {
+		return nil, resp, err
+	}
 
-    return root, resp, err
+	return root, resp, err
 }
